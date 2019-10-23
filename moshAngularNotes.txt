@@ -1,0 +1,382 @@
+https://youtu.be/k5E2AVpwsko?t=3572
+
+HMR = Hot Module Replacement or Hot Module Reloading
+
+Bundles can not yet be renamed, nor can you add new bundles.
+
+Current bundles are js files such as runtime.js and vendor.js
+//webpack injects these bundles into our index.html files at compile time (or runtime?)
+
+
+//backend django, express(node), asp.net 
+
+//TO STUDY!
+typeScript
+OOP
+components
+directives
+template-driven forms
+reactive forms
+comsuming http services 
+routing and navigation
+authentication and autorization
+deployment
+building real-time serverless applications with firesbase 
+
+//TYPESCRIPT
+type annotations
+arrow functions 
+interfaces 
+classes 
+constructors 
+access modifiers 
+properties 
+modules
+(transpiles to js)
+can transpile valid js code while ts compiler still considers erroneous... 
+(such as referencing a variable declared with let outside of its block, in this case it changes let to var as it
+compiles to es5 by default which has no definition for the word let, same things for typing...).
+// statically typed languages(JAVA) dynamic or optional typing (JavaScript). 
+//dynamically typed languages perform type checks @ run time opposed to compile time(like statically typed stuff).
+
+#TYPE ANNOTATIONS (default type is any)
+
+let a: number; //makes sure a is set to a value passable as a number.
+let b: booolean;
+let c: string;
+let d: any;// when type is unsure, unimportant.
+let arr: number[];
+Or
+let arr: number[]=[1,2,3];
+let f: any[]=[1,true,'a',false];
+
+#ENUM
+
+in vanilla js...
+
+//constants...
+const ColorRed=0;
+const ColorGreen=1;
+const ColorBlue=2;
+
+AS AN ENUM...
+
+//indexed like arrays by default...
+//number values can be explicitly set... enum Color{Red=0; Green=1; Blue=2};
+//EXPICITLY SETTING VALUES IS RECOMMENDED.
+enum Color {Red, Green, Blue};
+let backGroundColor=Color.Red;
+
+#TYPE ASSERTIONS
+let message; //default typed to any
+message = 'abc';
+
+let endsWithC_Check = (<string>message).endsWith('c); // message asserted as a string, endsWithC_Check is bool.
+
+OR
+
+let endsWithC_Check = (message as string).endsWith('c'); 
+//useful to access intellisense.
+
+
+#ARROW FUNCTIONS
+
+let log = (message) => {
+	console.log(message);
+}
+
+WITH ONLY ONE STATEMENT IN BODY... (lambda expression in C#)
+
+let log = (message) => console.log(message);
+
+#CUSTOM TYPES (#OBJECTS)
+
+let drawPoint = (x,y) => {
+	//...
+}
+
+//to simplify code instead of passing many parameters you can instead pass an object.
+
+let drawPoint = (point) => {
+	//...
+}
+
+//call it like this...
+drawPoint({
+x:1,
+y:1
+})
+
+#OBJECTS IN JS
+
+let car = { 
+	make: "Honda";
+	model: "Accord";
+	year: 2005; 
+}
+
+#INLINE ANNOTATION
+
+let drawPoint = (point: {x: number, y: number}) =>{
+	//do stuff...
+}
+
+//very verbose use inerfaces instead...
+
+//INTERFACES ARE PURELY FOR DECLARATIONS AND FUNCTION SIGNATURES, NO ALGORITHMS , NO IMPLEMENTATIONS
+#INTERFACES (define shape of objects, custom types more or less with certain requirments)
+
+interface Point{
+	x:number;
+	y:number
+}
+
+//notice type annotation of type Point (our custom type defined by interface)
+let drawPoint = (point:Point) => {
+	//..
+}
+
+#COHESION // related concepts should be grouped by CLASS(keep related things close for digestability)
+
+//cohesion implemented via interfaces...
+
+interface Point { 
+	x: number, 
+	y: number, 
+	draw: ()=>void;
+}
+
+//classes are better though...
+
+class Point{
+    x: number;
+    y: number;
+    draw(){
+        console.log("x : " + this.x + "\ny : " + this.y);
+    }
+}
+
+let point = new Point();
+point.x=1;
+point.y=2;
+point.draw();
+
+#CONSTRUCTORS
+//constructors are methods of classes which are called upon instantiation of a new object...
+//constructor() is the method we would use, it is a keyword in typeScript.
+
+class Point{
+    x: number;
+    y: number;
+    draw(){
+        console.log("x : " + this.x + "\ny : " + this.y);
+    }
+
+    constructor(x: number, y:number){
+        this.x = x;
+        this.y = y;
+    }
+}
+
+let point = new Point(1,2);
+
+//OPTIONAL PARAMETERS (to make parameters optional put a question mark 
+//immediately after the parameter name, befor the :, once a parameter is optional all parameters to the right
+// should be as well. see below...)
+
+class Point{
+    x: number;
+    y: number;
+    draw(){
+        console.log("x: " + this.x + "\ny : " + this.y);
+    }
+
+    constructor(x?: number, y?:number){
+        this.x = x;
+        this.y = y;
+    }
+}
+
+//ACCESS MODIFIERS (preface member variables with the word private // helps prevent bugs.)
+//public (default) , private and protectected
+
+    private x: number;
+    private y: number;
+
+ALSO... CAN BE CALLED IN CONTRUCTOR TO SIMPLIFY CODE AND LESS REPETITION
+
+class Point{
+	
+    //this.x and this.y are created automatically by compiler.
+    constructor(private x: number, private y:number){
+    }
+
+    draw(){
+        console.log("x : " + this.x + "\ny : " + this.y);
+    }
+}
+
+let point = new Point(1,2);
+point.draw();
+
+
+let point = new Point(1,2);
+point.draw();
+point.draw();
+
+#ACCESSORS
+
+
+    getX(){
+        return this.x;
+    }
+
+    setX(value){
+        if (value<0)
+            throw new Error('value cannot be less than 0.');
+
+        this.x = value;
+    }
+
+let point = new Point(1,2);
+let x = point.getX();
+point.setX(10);
+point.draw();
+
+#PROPERTIES (notice capitalization of property names and the space in the accessors(which are now properties)
+//traditionally you would define the fields as _x and _y and the properties as x and y.
+
+//Properties look like fields outside of the class, but internally they are a mehtod(s) like get & set.
+
+class Point{
+
+    constructor(private x: number, private y:number){
+    }
+
+    draw(){
+        console.log("x : " + this.x + "\ny : " + this.y);
+    }
+
+    get X(){
+        return this.x;
+    }
+
+    set X(value){
+        if (value<0)
+            throw new Error('value cannot be less than 0.');
+
+        this.x = value;
+    }
+}
+
+let point = new Point(1,2);
+let x = point.X;
+point.X=10;
+point.draw();
+
+
+OR (with the use of underline (also known as underscore)
+
+class Point{
+
+    constructor(private _x: number, private _y:number){
+    }
+
+    draw(){
+        console.log("x : " + this.x + "\ny : " + this.y);
+    }
+
+    get x(){
+        return this.x;
+    }
+
+    set x(value){
+        if (value<0)
+            throw new Error('value cannot be less than 0.');
+
+        this.x = value;
+    }
+}
+
+let point = new Point(1,2);
+let x = point.X;
+point.X=10;
+point.draw();
+
+
+#DEPENDENCY INJECTION
+
+having a constructor parameter as a type of a certain class (an object) to avoid coupling.
+this parameters type should then be added to app.module.ts and then a reference to a singleton implementation 
+will be injected into the constructed object. All components of the module who instantiate components with 
+this provider will access the same single entity in memory. Many components passing arguments to the same object
+of the providers class. 
+
+//elemnt of app.module.ts
+>courses.component.ts
+
+export class CoursesComponent{
+
+    title = "List of Courses";
+    courses;
+
+    constructor(service: CoursesService)
+    {
+        this.courses = service.getCourses();
+    }
+
+}
+
+>app.module.ts
+
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { AppComponent } from './app.component';
+import { CoursesComponent } from './courses.component';
+import { CourseComponent } from './course/course.component';
+import { CoursesService } from './courses.service';
+
+//decorator
+@NgModule({
+  declarations: [
+    AppComponent,
+    CoursesComponent,
+    CourseComponent,
+  ],
+  imports: [
+    BrowserModule
+  ],
+  providers: [
+    //Singleton patterm , only one instance of class in memory for all //!!
+    //components in module.
+    CoursesService
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+//GENERATE SERVICES... also components
+
+in terminal...
+
+//service
+
+n g s serviceName
+
+generates two files 
+src/app/serviceName.service.spec.ts (testing)
+AND
+src/app/serviceName.service.ts (logic)
+
+//component 
+
+n g c componentName
+
+generates a folder with 4 files...
+name.component.css
+name.component.html
+name.component.spec.ts
+name.component.ts
+
+also adds declaration and import to app.module.ts

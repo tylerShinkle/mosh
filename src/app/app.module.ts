@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { CoursesComponent } from './courses.component';
 import { CourseComponent } from './course/course.component';
+import { CoursesService } from './courses.service';
 
 //decorator
 @NgModule({
@@ -15,7 +16,11 @@ import { CourseComponent } from './course/course.component';
   imports: [
     BrowserModule
   ],
-  providers: [],
+  providers: [
+    //Singleton patterm , only one instance of class in memory for all 
+    //components in module.
+    CoursesService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
